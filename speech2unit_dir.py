@@ -3,7 +3,6 @@ import joblib
 import glob
 import os 
 import soundfile as sf
-# from transformers import Wav2Vec2Model
 from causal_hubert import DiscreteHubertEncoder, ApplyKmeans
 from argparse import ArgumentParser
 from faster_whisper import WhisperModel
