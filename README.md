@@ -17,4 +17,4 @@ python3 speech2unit_dir.py --audio_dir AUDIO_DIR_PATH --ext EXT
 ``` 
 AUDIO_DIR_PATH: the directory of the audio 
 
-EXT: extension of the audio, ex. flac
+EXT: extension of the audio, ex. wav
