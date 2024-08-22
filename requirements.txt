@@ -1,0 +1,6 @@
+torch
+soundfile
+tqdm
+joblib
+librosa
+sentencepiece
