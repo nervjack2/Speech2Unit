@@ -2,7 +2,8 @@
 Transform audio into interleaving sequnce. 
 We use COOLWhisper for ASR transcription, CausalHuBERT+Kmeans for speech units. 
 
-## Install (Important)
+See audio_dir/ for examples of interleaving results.
+## Install
 python == 3.8
 ```
 git clone https://github.com/nervjack2/Speech2Unit.git
