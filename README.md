@@ -1,9 +1,13 @@
 # Speech to Interleaving Unit
+Transform audio into interleaving sequnce. 
+We use COOLWhisper for ASR transcription, CausalHuBERT+Kmeans for speech units. 
 
 ## Install
-python >= 3.8
+python == 3.8
 ```
-pip install -r requirements
+git clone https://github.com/nervjack2/Speech2Unit.git
+cd Speech2Unit
+pip install -r requirements.txt
 git clone https://github.com/huggingface/transformers.git
 cp modeling_hubert.py transformers/src/transformers/models/hubert/modeling_hubert.py 
 cd transformers
