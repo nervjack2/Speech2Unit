@@ -4,7 +4,7 @@ import glob
 import librosa
 import os 
 import soundfile as sf
-from causal_hubert import DiscreteHubertEncoder, ApplyKmeans
+from streaming_hubert import StreamingHubertEncoder, ApplyKmeans
 from argparse import ArgumentParser
 from faster_whisper import WhisperModel
 from tqdm import tqdm 
@@ -15,13 +15,11 @@ def transcribe(audio_path):
     audio, sr = sf.read(audio_path)
     if sr != 16000:
         audio = librosa.resample(audio, orig_sr=sr, target_sr=16000)
-    # assert sr == 16000, "Sample rate of audio should be 16000 Hz"
-    # Maybe we can use batch pipeline in faster whisper for better efficiency
     segments, info = ASR.transcribe(audio, beam_size=5, language=args.lan, condition_on_previous_text=False, word_timestamps=True)
     return segments
 
 def quantize(audio_path, downsample):
-    feat, leng = encoder.encode(audio_path)
+    feat = encoder.encode(audio_path)
     ssl_units = apply_kmeans(feat)
     return [f"<|{p}|>" for p in ssl_units][::downsample]
 
@@ -52,7 +50,7 @@ if __name__ == '__main__':
     ASR = WhisperModel("andybi7676/cool-whisper", device=args.device, compute_type="float16")
 
     # Initialize causal HuBERT and kmeans quantize module
-    encoder = DiscreteHubertEncoder()
+    encoder = StreamingHubertEncoder()
     apply_kmeans = ApplyKmeans(args.km_model, use_gpu=True)
     
     file_lists = list(glob.glob(os.path.join(args.audio_dir, f'**/*.{args.ext}'), recursive=True))
