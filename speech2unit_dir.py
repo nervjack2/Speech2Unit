@@ -40,14 +40,16 @@ if __name__ == '__main__':
     parser.add_argument("--ext", type=str, help="Wave format", default='wav')
     parser.add_argument("--downsample", type=int, help="Downsample ratio", default=2)
     parser.add_argument("--lan", type=str, help="Language code", default='zh')
+    parser.add_argument("--unit_only", action="store_true", help="Extract HuBERT unit only")
     parser.add_argument("--device", type=str, default="cuda", help="Acceleration device")
     parser.add_argument("--km_model", type=str, default="./km_model.pt")
     parser.add_argument("--fp16", action="store_true", help="Data types for quantizing HuBERT features. Using flash_attention_2 (float16), which is faster, but sometimes results in different results")
     args = parser.parse_args()
 
     TPS = 50/args.downsample
-    # Initialize Whisper model for transcribing
-    ASR = WhisperModel("andybi7676/cool-whisper", device=args.device, compute_type="float16")
+    if not args.unit_only:
+        # Initialize Whisper model for transcribing
+        ASR = WhisperModel("andybi7676/cool-whisper", device=args.device, compute_type="float16")
 
     # Initialize causal HuBERT and kmeans quantize module
     encoder = StreamingHubertEncoder()
@@ -58,13 +60,18 @@ if __name__ == '__main__':
 
     for audio_path in tqdm(file_lists):
         # Transcribe given audio
-        segments = transcribe(audio_path)
+        if not args.unit_only:
+            segments = transcribe(audio_path)
         # Quantize Causal HuBERT features
         kms = quantize(audio_path, args.downsample)
         # Generate interleaving sequence
-        interleave = combine(kms, segments)
+        if not args.unit_only:
+            interleave = combine(kms, segments)
         # Output path
         output_path = os.path.splitext(audio_path)[0] + ".txt"
         # Dump results
         with open(output_path, 'w') as f:
-            f.write(interleave + '\n')
+            if not args.unit_only:
+                f.write(interleave + '\n')
+            else:
+                f.write(" ".join(kms) + '\n')
