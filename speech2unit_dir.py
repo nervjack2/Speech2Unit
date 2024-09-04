@@ -42,7 +42,7 @@ if __name__ == '__main__':
     parser.add_argument("--lan", type=str, help="Language code", default='zh')
     parser.add_argument("--unit_only", action="store_true", help="Extract HuBERT unit only")
     parser.add_argument("--device", type=str, default="cuda", help="Acceleration device")
-    parser.add_argument("--km_model", type=str, default="./km_model.pt")
+    parser.add_argument("--km_model", type=str, default="./km_500_inf.pt")
     parser.add_argument("--fp16", action="store_true", help="Data types for quantizing HuBERT features. Using flash_attention_2 (float16), which is faster, but sometimes results in different results")
     args = parser.parse_args()
 
