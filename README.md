@@ -1,6 +1,6 @@
 # Speech to Interleaving Unit
 Transform audio into interleaving sequnce. 
-We use COOLWhisper for ASR transcription, CausalHuBERT+Kmeans for speech units. 
+We use Whisper for ASR transcription, CausalHuBERT+Kmeans for speech units. 
 
 See audio_dir/ for examples of interleaving results.
 ## Install (Important)
